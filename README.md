@@ -8,7 +8,7 @@ We develop a neurosymbolic method that learns how to infer Template Programs; pa
  
 ## About the paper
 
-![Paper](https://rkjones4.github.io/pdf/template.pdf)
+[Paper](https://rkjones4.github.io/pdf/template.pdf)
 
 Presented at [ICML 2024](https://icml.cc/).
 
@@ -34,13 +34,13 @@ This repository contains code and data for the experiments in the above paper.
 
 Google drive download links for:
 
-![Pretrained Models](https://drive.google.com/file/d/1h9xKqO40vgMJ6A_np10DzyFjQR-pBtk_/view?usp=sharing)
+[Pretrained Models](https://drive.google.com/file/d/1h9xKqO40vgMJ6A_np10DzyFjQR-pBtk_/view?usp=sharing)
 
-![Layout Target Data](https://drive.google.com/file/d/1aJDFDIL58-qBpjeFucuAvnPJKrn8r7qQ/view?usp=sharing)
+[Layout Target Data](https://drive.google.com/file/d/1aJDFDIL58-qBpjeFucuAvnPJKrn8r7qQ/view?usp=sharing)
 
-![Omni Target Data](https://drive.google.com/file/d/1m3sFXQaDf8nHYy4JNlgs9sJj_BLhrYxN/view?usp=sharing)
+[Omni Target Data](https://drive.google.com/file/d/1m3sFXQaDf8nHYy4JNlgs9sJj_BLhrYxN/view?usp=sharing)
 
-![Shape Target Data](https://drive.google.com/file/d/1UX0hXNO4IBvcwUmIUMtz6vtlKhwaZ4M0/view?usp=sharing)
+[Shape Target Data](https://drive.google.com/file/d/1UX0hXNO4IBvcwUmIUMtz6vtlKhwaZ4M0/view?usp=sharing)
 
 Please unzip each of these files from the root of this directory.
 
@@ -112,7 +112,7 @@ For shapes, we save only three rows (for time consideration), these correspond t
 
 # Training new models
 
-** Pretraining **
+**Pretraining**
 
 To start a new pretaining run, you can use the following command:
 
@@ -128,7 +128,7 @@ python3 executors/common/test.py {DOMAIN} vis 10 5
 
 This will render 10 synthetic concepts that each have 5 members.
 
-** Finetuning **
+**Finetuning**
 
 To start a new finetuning run, you can use the following command:
 
@@ -136,7 +136,7 @@ To start a new finetuning run, you can use the following command:
 python3 main.py -en {EXP_NAME} -dn {DOMAIN} -mm finetune -lmp pretrained_models/{DOMAIN}/pre_net.pt
 ```
 
-** Conditional generative model **
+**Conditional generative model**
 
 To train a new mean aggregation network, which is used for the few-shot generation task, first you should complete a finetuning run. Say this finetuning run was saved under the experiment name FT_EXP_NAME, then you can train a new conditional generative model with the following command:
 
