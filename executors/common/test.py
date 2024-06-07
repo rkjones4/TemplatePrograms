@@ -38,7 +38,7 @@ def check_eval_interm_logic(ex, data):
 
         if not (s2di == deriv_inp[:s2di.shape[0]]).all():
             print("Failed struct out to deriv inp")
-            a = 1/0
+            assert False
 
         for i in range(dargs.max_vis_inputs):
 
@@ -55,7 +55,7 @@ def check_eval_interm_logic(ex, data):
 
             if nct > 0 and not (d2pi == pinp).all():
                 print("failed deriv out to param inp")
-                a = 1/0
+                assert False
                         
     print("Checked eval interim logic")
 
@@ -83,7 +83,7 @@ def check_inf_to_train_logic(ex, data):
 
         if st != pst or dt != pdt or pt != ppt:
             print("failed check inf to train logic")
-            a = 1/0
+            assert False
 
         for i,v in enumerate(d.valid):
 
@@ -96,7 +96,7 @@ def check_inf_to_train_logic(ex, data):
 
             if pdrv != tar:
                 print("failed check inf to train logic")
-                a = 1/0
+                assert False
                         
     print("Checked inf to train logic")
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         'MAX_PARAM_TOKENS': 128
     }
     
-    if nm == 'lay':
+    if nm == 'layout':
         ex = ex_layout.LayExecutor(config)
     elif nm == 'omni':
         ex = ex_omni.OmnExecutor(config)                

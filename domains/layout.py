@@ -9,26 +9,61 @@ import torch
 
 LYT_CMN_ARGS = [
 
-    ('-msl', '--max_seq_len', 100, int),
+    # mst -> maximum tokens used in a template program
+    # mdt -> maximum tokens used in a structural expansion
+    # mpt -> maximum number of parameter tokens
+    
+    # msl -> sets bound for program length during synthetic sampling
+    # mp - > number of visual codes for each input
+
+    # est -> threshold for early stopping logic
+    # esm -> metric used in early stopping
+
+    # emn -> reconstruction metric in objective
+    # ddp -> penalty for differences in tokens used between instantiated programs and template programs
+        
     ('-mst', '--max_struct_tokens', 64, int),
     ('-mdt', '--max_deriv_tokens', 16, int),
     ('-mpt', '--max_param_tokens', 72, int),
+
+    ('-msl', '--max_seq_len', 100, int),
     ('-mp', '--max_prim_enc', 16, int),
     
     ('-est', '--es_threshold', 0.0001,  float),
     ('-esm', '--es_metric', 'Obj',  str),
         
-    ('-emn', '--eval_metric_name', 'color_iou', str),
-    
+    ('-emn', '--eval_metric_name', 'color_iou', str),    
     ('-ddp', '--ddof_pen', 0.001, float),
 ]
 
 LYT_PT_ARGS = [
+    # bs -> pretraining batch size
+    # beams -> pretraining beam size
+    
     ('-bs', '--batch_size', 32, int),
     ('-beams', '--beams', 5, int),
 ]
 
 LYT_FT_ARGS = [
+
+    # thr -> threshold beyond which record new best objective value
+    # bs -> batch size for finetuning
+
+    # ts -> training size for finetuning
+    # evs -> val size for finetuning
+    # ets -> test size for finetuning
+
+    # beams -> beam size used during inference phase
+    # esb -> beam size used during early stopping logic for training phase
+    # eps -> maximum epochs used during each training phase
+    # evp -> how often to do eval early stopping logic during training phase
+
+    # fsg_net -> few-shot gen num tasks
+    # fsg_ppt -> number of prompts for each task (can be set higher for layout)
+    # fsg_gpp -> how many generations to produce for each prompt
+    # fsg_pen -> how many images are in the prompt set
+    # fsg_ten -> how many images are in the held out target set
+    
     ('-thr', '--threshold', 0.0001, float),
     ('-bs', '--batch_size', 20, int),
 
@@ -40,7 +75,6 @@ LYT_FT_ARGS = [
     ('-esb', '--es_beams', 5, int),
     ('-eps', '--epochs', 50, int),
     ('-evp', '--eval_per', 5, int),
-
 
     ('-fsg_nt', '--fsg_num_tasks', 168, int),
     ('-fsg_ppt', '--fsg_prompts_per_task', 1, int),
