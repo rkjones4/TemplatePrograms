@@ -10,6 +10,8 @@ We develop a neurosymbolic method that learns how to infer Template Programs; pa
 
 [Paper](https://rkjones4.github.io/pdf/template.pdf)
 
+[Project Page](https://rkjones4.github.io/template.html)
+
 Presented at [ICML 2024](https://icml.cc/).
 
 ## Bibtex
