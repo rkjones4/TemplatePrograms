@@ -9,85 +9,90 @@ import random
 import numpy  as np
 
 DOM_PROB_TRAIN_LOG_INFO = [
-    ('Loss', 'loss', 'batch_count'),
-    ('Struct Loss', 'struct_loss', 'batch_count'),
-    ('Deriv Loss', 'deriv_loss', 'batch_count'),
-    ('Param Loss', 'param_loss', 'batch_count'),
-    ('Struct Acc', 'struct_corr', 'struct_total'),
-    ('Deriv Acc', 'deriv_corr', 'deriv_total'),    
-    ('Param Acc', 'param_corr', 'param_total')
+    ('Loss', 'loss', 'batch_count'), # overall loss
+    ('Struct Loss', 'struct_loss', 'batch_count'), # loss on template program
+    ('Deriv Loss', 'deriv_loss', 'batch_count'), # loss on structural expansion
+    ('Param Loss', 'param_loss', 'batch_count'), # loss on parameter instantion
+    ('Struct Acc', 'struct_corr', 'struct_total'), # acc on template program tokens
+    ('Deriv Acc', 'deriv_corr', 'deriv_total'), # acc on structural expansion tokens
+    ('Param Acc', 'param_corr', 'param_total')# acc on parameter tokens
 ]
 
 DOM_PROB_EVAL_LOG_INFO = [    
-    ('Obj', 'mval', 'mval_cnt'),    
-    ('Prog Len', 'prog_len', 'rec_cnt'),        
-    ('GPP Len', 'gpp_len', 'gpp_cnt'),
-    ('DV Len', 'dv_len', 'dv_cnt'),
-    ('PRM Len', 'prm_len', 'prm_cnt'),
-    ('NH Avg', 'nh_amt', 'gpp_cnt'),
-    ('Static %', 'static_cnt', 'gpp_cnt'),
-    ('Shared %', 'shared_cnt', 'gpp_cnt'),    
-    ('Errors', 'errs', 'gpp_cnt'),
+    ('Obj', 'mval', 'mval_cnt'), # objective function 
+    ('Prog Len', 'prog_len', 'rec_cnt'), # length of program
+    ('GPP Len', 'gpp_len', 'gpp_cnt'), # length of template program
+    ('DV Len', 'dv_len', 'dv_cnt'), # length of structural expansion
+    ('PRM Len', 'prm_len', 'prm_cnt'), # length of parameter instantion
+    ('NH Avg', 'nh_amt', 'gpp_cnt'), # number of hole tokens in template program
+    ('Static %', 'static_cnt', 'gpp_cnt'), # percent of template programs that have a static parameter relation
+    ('Shared %', 'shared_cnt', 'gpp_cnt'), # percent of template programs that have a shared parameter relation
+    ('Errors', 'errs', 'gpp_cnt'), # Number of inferences that had an error
 ]
 
 DOM_CMN_ARGS = [
 
-    ('-en', '--exp_name', None,  str),
+    ('-en', '--exp_name', None,  str), # experiment name
     
-    ('-rd', '--rd_seed', 42,  int),
-    ('-o', '--outpath', 'model_output',  str),
-    ('-dp', '--dropout', .1, float),
-    ('-lr', '--lr', 0.0001,  float),
-                
+    ('-rd', '--rd_seed', 42,  int), # random seed
+    ('-o', '--outpath', 'model_output',  str), # where experiments are saved
+    ('-dp', '--dropout', .1, float), # dropout
+    ('-lr', '--lr', 0.0001,  float), # learning rate
+
+    # Transformer parameters
     ('-nl', '--num_layers', 8, int),
     ('-nh', '--num_heads', 16, int),
     ('-hd', '--hidden_dim', 256, int),    
-    
+
+    # loading logic
     ('-lmp', '--load_model_path', None, str),
     ('-lgmp', '--load_gen_model_path', None, str),
     ('-lrp', '--load_res_path', None, str),            
-    
+
+    # for pretraining, how often to print results
     ('-logp', '--log_period', 10, int),    
-    
+
+    # Number of visual inputs in each concept group presented to network
     ('-mvi', '--max_vis_inputs', 5, int),
 
+    # Accumulation period for gradients
     ('-accp', '--acc_period', 1, int),
+
+    # How many examples to write 
     ('-nw', '--num_write', 10, int),
-    
+
+    # Setting for sampling programs during wake-sleep
     ('-gbms', '--gen_beam_size', 100, int),
 ]
 
 DOM_PT_ARGS = [    
 
-    ('-ts', '--train_size', 200, int),    
-    ('-evs', '--eval_size', 200,  int),
-    ('-ets', '--etest_size', 200,  int),
+    ('-ts', '--train_size', 200, int), # size of static training set
+    ('-evs', '--eval_size', 200,  int), # size of static validation set
+    ('-ets', '--etest_size', 200,  int), # size of static test set
     
-    ('-mi', '--max_iters', 100000000, int),
-    ('-esp', '--es_patience', 2500000, int),
-    ('-prp', '--print_per', 10000, int),
-    ('-evp', '--eval_per', 100000, int),
-    ('-svp', '--save_per', None, int),
-    ('-strm', '--stream_mode', 'y', str), # can be set to 's' for static
+    ('-mi', '--max_iters', 100000000, int), # maximum iterations to train for
+    ('-esp', '--es_patience', 2500000, int), # patience
+    ('-prp', '--print_per', 10000, int), # how often to print training results
+    ('-evp', '--eval_per', 100000, int), # how often to evaluate 
+    ('-svp', '--save_per', None, int), # how often to save model, defaults to eval_per
+    ('-strm', '--stream_mode', 'y', str), # by default we stream synthetic data, this can be set to 's' to remove streaming (static)
 ]
 
 DOM_FT_ARGS = [
     
-    ('-ftm', '--ft_mode', 'LEST_ST_WS', str),    
-    ('-wts', '--ws_train_size', 30000, int),  
-    ('-evp', '--eval_per', 1, int),
+    ('-ftm', '--ft_mode', 'LEST_ST_WS', str), # which PLAD finetuning techniques to use
+    ('-wts', '--ws_train_size', 30000, int), # how many generations to sample during wake-sleep
     
-    ('-mi', '--max_iters', 10000, int),
-    ('-infp', '--infer_patience', 10, int),
-    ('-itrp', '--iter_patience', 250, int),
-                            
-    ('-esp', '--es_patience', 10,  int),
-    
-    ('-lest_w', '--lest_weight', 0., float),
-    ('-st_w', '--st_weight', 0., float),
-    ('-ws_w', '--ws_weight', 0., float),
+    ('-mi', '--max_iters', 10000, int), # maximum finetuning iterations
+    ('-infp', '--infer_patience', 10, int), # early stopping within each training phase
+    ('-itrp', '--iter_patience', 250, int), # early stopping of entire finetuning alg
+                                
+    ('-lest_w', '--lest_weight', 0., float), # can reweight PLAD finetuning techniques
+    ('-st_w', '--st_weight', 0., float), # can reweight PLAD finetuning techniques
+    ('-ws_w', '--ws_weight', 0., float), # can reweight PLAD finetuning techniques
 
-    ('-ws_gn', '--ws_grace_num', 2, int),
+    ('-ws_gn', '--ws_grace_num', 2, int), # used during wake-sleep sampling to help avoid unnecessary rejections
 
 ]
 

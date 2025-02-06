@@ -7,37 +7,72 @@ import random, torch
 from utils import device
 from copy import deepcopy
 
-TARGET_TRAIN_PATH = f'data/omniglot/gt_omni_train.txt'
-TARGET_VAL_PATH = f'data/omniglot/gt_omni_val.txt'
-TARGET_TEST_PATH = f'data/omniglot/gt_omni_test.txt'
+TARGET_TRAIN_PATH = f'data/omni/gt_omni_train.txt'
+TARGET_VAL_PATH = f'data/omni/gt_omni_val.txt'
+TARGET_TEST_PATH = f'data/omni/gt_omni_test.txt'
 
 OMN_CMN_ARGS = [
 
-    ('-msl', '--max_seq_len', 128, int), 
+    # mst -> maximum tokens used in a template program
+    # mdt -> maximum tokens used in a structural expansion
+    # mpt -> maximum number of parameter tokens
+    
+    # msl -> sets bound for program length during synthetic sampling
+    # mp - > number of visual codes for each input
+
+    # est -> threshold for early stopping logic
+    # esm -> metric used in early stopping
+
+    # emn -> reconstruction metric in objective
+    # ddp -> penalty for differences in tokens used between instantiated programs and template programs
+    
     ('-mst', '--max_struct_tokens', 64, int),
     ('-mdt', '--max_deriv_tokens', 16, int),
     ('-mpt', '--max_param_tokens', 64, int),
+
+    ('-msl', '--max_seq_len', 128, int), 
     ('-mp', '--max_prim_enc', 16, int),
-    
+
+    ('-est', '--es_threshold', 0.00001,  float),    
     ('-esm', '--es_metric', 'Obj',  str),
 
+    ('-emn', '--eval_metric_name', 'icd', str),
+    ('-ddp', '--ddof_pen', 0.001, float),
+
+    # Paths for target data
     ('-ttrp', '--target_train_path', TARGET_TRAIN_PATH, str),
     ('-tvp', '--target_val_path', TARGET_VAL_PATH, str),
     ('-ttep', '--target_test_path', TARGET_TEST_PATH, str),
-
-    ('-emn', '--eval_metric_name', 'icd', str),
-
-    ('-ddp', '--ddof_pen', 0.001, float),
 ]
 
 OMN_PT_ARGS = [
+    # bs -> pretraining batch size
+    # beams -> pretraining beam size
+    
     ('-bs', '--batch_size', 40, int),
     ('-beams', '--beams', 5, int),    
 ]
 
 OMN_FT_ARGS = [
 
-    ('-est', '--es_threshold', 0.00001,  float),
+    # thr -> threshold beyond which record new best objective value
+    # bs -> batch size for finetuning
+
+    # ts -> training size for finetuning
+    # evs -> val size for finetuning
+    # ets -> test size for finetuning
+
+    # beams -> beam size used during inference phase
+    # esb -> beam size used during early stopping logic for training phase
+    # eps -> maximum epochs used during each training phase
+    # evp -> how often to do eval early stopping logic during training phase
+
+    # fsg_net -> few-shot gen num tasks
+    # fsg_ppt -> number of prompts for each task 
+    # fsg_gpp -> how many generations to produce for each prompt
+    # fsg_pen -> how many images are in the prompt set
+    # fsg_ten -> how many images are in the held out target set
+
     ('-thr', '--threshold', 0.00001, float),
     ('-bs', '--batch_size', 20, int),
 

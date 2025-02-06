@@ -15,31 +15,71 @@ from copy import deepcopy
 WMV = 10.
 
 SHAPE_CMN_ARGS = [
-    ('-msl', '--max_seq_len', 128, int), 
+
+    # mst -> maximum tokens used in a template program
+    # mdt -> maximum tokens used in a structural expansion
+    # mpt -> maximum number of parameter tokens
+    
+    # msl -> sets bound for program length during synthetic sampling
+    # mp - > number of visual codes for each input
+
+    # est -> threshold for early stopping logic
+    # esm -> metric used in early stopping
+
+    # emn -> reconstruction metric in objective
+    # ddp -> penalty for differences in tokens used between instantiated programs and template programs
+
+        
     ('-mst', '--max_struct_tokens', 64, int),
     ('-mdt', '--max_deriv_tokens', 24, int),
     ('-mpt', '--max_param_tokens', 80, int),
-    ('-esm', '--es_metric', 'Obj',  str),
 
+    ('-msl', '--max_seq_len', 128, int),
     ('-mp', '--max_prim_enc', 4, int),
-    
-    ('-est', '--es_threshold', 0.00001,  float),
-    ('-thr', '--threshold', 0.00001, float),
-    
-    ('-emn', '--eval_metric_name', 'Cdist', str),
 
+    ('-est', '--es_threshold', 0.00001,  float),
+    ('-esm', '--es_metric', 'Obj',  str),                
+    
+    ('-emn', '--eval_metric_name', 'Cdist', str),    
+    ('-ddp', '--ddof_pen', 0.001, float),
+
+    # visual input type (prim or voxel)
     ('-vt', '--vin_type', 'prim', str),
+
+    # if using voxels, what dimension should be
     ('-vd', '--voxel_dim', 64, int),
-    ('-ddp', '--ddof_pen', 0.001, float), 
 ]
 
 SHAPE_PT_ARGS = [
+    # bs -> pretraining batch size, note: set this lower when using 'voxel' mode
+    # beams -> pretraining beam size
+
     ('-bs', '--batch_size', 32, int),
     ('-beams', '--beams', 5, int),
 ]
 
 SHAPE_FT_ARGS = [
-    ('-bs', '--batch_size', 20, int),
+
+    # thr -> threshold beyond which record new best objective value
+    # bs -> batch size for finetuning
+
+    # ts -> training size for finetuning
+    # evs -> val size for finetuning
+    # ets -> test size for finetuning
+
+    # beams -> beam size used during inference phase
+    # esb -> beam size used during early stopping logic for training phase
+    # eps -> maximum epochs used during each training phase
+    # evp -> how often to do eval early stopping logic during training phase
+
+    # fsg_net -> few-shot gen num tasks
+    # fsg_ppt -> number of prompts for each task 
+    # fsg_gpp -> how many generations to produce for each prompt
+    # fsg_pen -> how many images are in the prompt set
+    # fsg_ten -> how many images are in the held out target set
+
+    ('-thr', '--threshold', 0.00001, float),
+    ('-bs', '--batch_size', 20, int), # if using voxel, potentially reduce this
 
     ('-ts', '--train_size', 1000, int),    
     ('-evs', '--eval_size', 100,  int),
@@ -50,6 +90,7 @@ SHAPE_FT_ARGS = [
     ('-eps', '--epochs', 50, int),
     ('-evp', '--eval_per', 5, int),
 
+    # for shape use slightly less generations for time
     ('-wts', '--ws_train_size', 10000, int),
 
     ('-fsg_nt', '--fsg_num_tasks', 100, int),
@@ -57,7 +98,6 @@ SHAPE_FT_ARGS = [
     ('-fsg_gpp', '--fsg_gens_per_prompt', 5, int),
     ('-fsg_pen', '--fsg_prompt_ex_num', 5, int),
     ('-fsg_ten', '--fsg_target_ex_num', 5, int),
-
 ]
 
         

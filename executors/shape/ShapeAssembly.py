@@ -303,7 +303,7 @@ class Program():
                 
     # Given cuboids a and b, find the closest pair of points in their local coordinate frames to one another
     def getClosestPoints(self, a, b, xyz1, xyz2, is_bbox):
-        a = 1/0
+        assert False
         
     # For aligned cuboids with a previous attachments,
     # see if increasing any dimension would cause the fit to be improved
